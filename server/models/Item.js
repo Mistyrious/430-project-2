@@ -13,7 +13,7 @@ const ItemSchema = new mongoose.Schema({
     set: setName,
   },
   parentList: {
-    type: mongoose.Schema.Types.ObjectId, 
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'Tierlist',
     require: true,
   },
@@ -42,7 +42,7 @@ ItemSchema.statics.toAPI = (doc) => ({
 
 ItemSchema.statics.findByParentList = (parentList, callback) => {
   const search = {
-    //parent: mongoose.Types.ObjectId(ownerId),
+    // parent: mongoose.Types.ObjectId(ownerId),
   };
 
   return ItemModel.find(search).select('name parentList votes score').lean().exec(callback);

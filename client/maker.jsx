@@ -1,125 +1,93 @@
 const helper = require('./helper.js');
 
-const handleDomo = (e) => {
+const handleTierlist = (e) => {
     e.preventDefault();
     helper.hideError();
 
-    const name = e.target.querySelector('#domoName').value;
-    const age = e.target.querySelector('#domoAge').value;
-    const level = e.target.querySelector('#domoLevel').value;
+    const title = e.target.querySelector('#tierlistTitle').value;
+    const items = e.target.querySelector('#tierlistItems');
     const _csrf = e.target.querySelector('#_csrf').value;
 
-    if(!name || !age || !level){
-        helper.handleError('All fields are required!');
+    if(!title || items.children.length < 5){
+        helper.handleError('List title, and at least 5 items are required!');
         return false;
     }
 
-    helper.sendPost(e.target.action, {name, age, level, _csrf}, loadDomosFromServer);
+    const itemObjects = [];
+    [...items.children].forEach(item => {
+        if(!item.querySelector('input').value || !item.querySelector('select').value){
+            helper.handleError('Each item must have a name and score!');
+            return false;
+        } else{
+            let obj = {
+                name: item.querySelector('input').value,
+                score: item.querySelector('select').value
+            }
+            itemObjects.push(obj);
+        }
+    });
+
+    helper.sendPost(e.target.action, {title, itemObjects, level, _csrf}, loadDomosFromServer);
 
     return false;
 }
 
-const handlePassChange = (e) => {
-    e.preventDefault();
-    helper.hideError();
+const createScoreSelect = () => {
+    const select = document.createElement('select');
+    select.id = `item${idNum}Score`;
+    select.innerHTML = `
+        <option value="">Item Score</option>
+        <option value="6">S</option>
+        <option value="5">A</option>
+        <option value="4">B</option>
+        <option value="3">C</option>
+        <option value="2">D</option>
+        <option value="1">F</option>
+    `;
 
-    const oldPass = e.target.querySelector('#oldPass').value;
-    const pass = e.target.querySelector('#pass').value;
-    const pass2 = e.target.querySelector('#pass2').value;
-    const _csrf = e.target.querySelector('#_csrf').value;
-
-    if(!oldPass || !pass || !pass2){
-        helper.handleError('All fields are required!');
-        return pass;
-    }
-
-    if(pass !== pass2){
-        helper.handleError('New passwords do not match!');
-    }
-
-    helper.sendPost(e.target.action, {oldPass, pass, pass2, _csrf});
+    return select;
 }
 
-const PassChangeForm = (props) => {
+const addItemInput = (e) => {
+    const itemArea = e.target.querySelector('#items');
+    let item = document.createElement('div');
+    const name = document.createElement('input');
+    name.type = "text";
+    name.name = "name";
+    name.placeholder = "Item Name";
+
+    const score = createScoreSelect();
+
+    item.appendChild(name);
+    item.appendChild(score);
+    itemArea.appendChild(item);
+}
+
+const tierlistForm = (props) => {
     return(
-        <form id="changePassForm"
-            onSubmit={handlePassChange}
-            name="changePassForm"
-            action="/changePass"
+        <form id="tierlistForm"
+            onSubmit={handleTierlist}
+            name="tierlistForm"
+            action="/makeList"
             method="POST"
-            className="passForm"
+            className="tierlistForm"
         >
-            <label htmlFor="oldPass">Current Password: </label>
-            <input id="oldPass" type="password" name="oldPass" placeholder="password" />
-            <label htmlFor="pass">New Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="password" />
-            <label htmlFor="pass2">Confirm New Password: </label>
-            <input id="pass2" type="password" name="pass2" placeholder="password" />
-            <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
+            <label htmlFor="title">Title: </label>
+            <input id="title" type="text" name="title" placeholder="List Name" />
+            <div id="items">
+
+            </div>
+            <button id="addItem" onClick={addItemInput}>Add Item</button>
             <input className="makeDomoSubmit" type="submit" value="Update" />
         </form>
     );
-}
-
-const DomoForm = (props) => {
-    return(
-        <form id="domoForm"
-            onSubmit={handleDomo}
-            name="domoForm"
-            action="/maker"
-            method="POST"
-            className="domoForm"
-        >
-            <label htmlFor="name">Name: </label>
-            <input id="domoName" type="text" name="name" placeholder="Domo Name" />
-            <label htmlFor="age">Age: </label>
-            <input id="domoAge" type="number" min="0" name="age" />
-            <label htmlFor="level">Level: </label>
-            <input id="domoLevel" type="number" min="0" max="100" name="level" />
-            <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
-            <input className="makeDomoSubmit" type="submit" value="Make Domo" />
-        </form>
-    );
-}
-
-const DomoList = (props) => {
-    if(props.domos.length === 0){
-        return(
-            <div className="domoList">
-                <h3 className="emptyDomo">No Domos Yet!</h3>
-            </div>
-        );
-    }
-
-    const domoNodes = props.domos.map(domo => {
-        return(
-            <div key={domo._id} className="domo">
-                <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
-                <h3 className="domoName">Name: {domo.name}</h3>
-                <h3 className="domoAge">Age: {domo.age}</h3>
-                <h3 className="domoLevel">Level: {domo.level}</h3>
-            </div>
-        );
-    });
-
-    return(
-        <div className="domoList">
-            {domoNodes}
-        </div>
-    );
-}
-
-const loadDomosFromServer = async() => {
-    const response = await fetch('/getDomos');
-    const data = await response.json();
-    ReactDOM.render(<DomoList domos={data.domos}/>, document.getElementById('domos'));
 }
 
 const init = async() => {
     const response = await fetch('/getToken');
     const data = await response.json();
 
-    ReactDOM.render(<DomoForm csrf={data.csrfToken} />, document.getElementById('makeDomo'));
+    ReactDOM.render(<tierlistForm csrf={data.csrfToken} />, document.getElementById('makeTierlist'));
 
     ReactDOM.render(<PassChangeForm csrf={data.csrfToken} />, document.getElementById('changePass'));
 

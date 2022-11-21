@@ -1,15 +1,8 @@
-/* Takes in an error message. Sets the error message up in html, and
-   displays it to the user. Will be hidden by other events that could
-   end in an error.
-*/
 const handleError = (message) => {
     document.getElementById('errorMessage').textContent = message;
-    document.getElementById('domoMessage').classList.remove('hidden');
+    document.getElementById('errorArea').classList.remove('hidden');
   };
   
-  /* Sends post requests to the server using fetch. Will look for various
-     entries in the response JSON object, and will handle them appropriately.
-  */
 const sendPost = async (url, data, handler) => {
     const response = await fetch(url, {
         method: 'POST',
@@ -20,7 +13,7 @@ const sendPost = async (url, data, handler) => {
     });
 
     const result = await response.json();
-    document.getElementById('domoMessage').classList.add('hidden');
+    document.getElementById('errorArea').classList.add('hidden');
 
     if(result.error){
         handleError(result.error);
@@ -36,7 +29,7 @@ const sendPost = async (url, data, handler) => {
 }
 
 const hideError = () => {
-    document.getElementById('domoMessage').classList.add('hidden');
+    document.getElementById('errorArea').classList.add('hidden');
 }
 
 module.exports = {

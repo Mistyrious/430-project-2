@@ -5,7 +5,7 @@
     "node": "12.16.0",
     "npm": "6.13.7"
   },
-  "description": "A Simple Login Example using Node.js, Mongo and Redis",
+  "description": "Collective Tierlist Application",
   "main": "./server/app.js",
   "scripts": {
     "webpack": "webpack",
@@ -22,7 +22,7 @@
     "Redis",
     "Login"
   ],
-  "author": "Cody Van De Mark / Austin Willoughby",
+  "author": "Claudia Sánchez",
   "license": "Apache 2.0",
   "devDependencies": {
     "@babel/core": "^7.20.2",

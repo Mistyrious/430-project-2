@@ -17,7 +17,7 @@ const router = require('./router.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURI = process.env.MONGODB_URI || 'mongodb://127.0.0.1/CollectiveTierlist';
+const dbURI = process.env.MONGODB_URI;
 mongoose.connect(dbURI, (err) => {
   if (err) {
     console.log('Could not connect to database');
@@ -25,7 +25,7 @@ mongoose.connect(dbURI, (err) => {
   }
 });
 
-const redisURL = process.env.REDISCLOUD_URL;
+const redisURL = process.env.REDISCLOUD_URL || 'redis://default:CVYp8H5njf5TzS5bvDQl8o33HWFBq89H@redis-17178.c257.us-east-1-3.ec2.cloud.redislabs.com:17178';
 
 const redisClient = redis.createClient({
   legacyMode: true,

@@ -6,9 +6,10 @@ const router = (app) => {
   app.get('/getLists', mid.requiresSecure, controllers.Tierlist.getLists);
   app.get('/getULists', mid.requiresSecure, mid.requiresLogin, controllers.Tierlist.getULists);
   app.post('/makeTierlist', mid.requiresSecure, mid.requiresLogin, controllers.Tierlist.makeTierlist);
+  app.post('/updateTierlist', mid.requiresSecure, mid.requiresLogin, controllers.Tierlist.updateTierlist);
 
   app.get('/getToken', mid.requiresSecure, controllers.Account.getToken);
-  //app.get('/account', mid.requiresSecure, mid.requiresLogin, controllers.Account.accountPage);
+  // app.get('/account', mid.requiresSecure, mid.requiresLogin, controllers.Account.accountPage);
 
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
@@ -18,10 +19,7 @@ const router = (app) => {
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
-  // app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
-  // app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
-
-  app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.get('/', mid.requiresSecure, mid.requiresLogin, controllers.Account.homepage);
 };
 
 module.exports = router;

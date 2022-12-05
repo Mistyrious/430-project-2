@@ -46,6 +46,26 @@ const makeTierlist = async (req, res) => {
   }
 };
 
+const updateTierlist = async (req, res) => {
+  if (!req.body.title || !req.body.items) {
+    return res.status(400).json({ error: 'No list chosen!' });
+  }
+
+  let doc;
+  try {
+    doc = await TierlistModel.findByTitle(req.body.title).exec();
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'Something went wrong retrieving the list' });
+  }
+
+  if (!doc) {
+    return res.status(404).json({ error: 'No list with that name found' });
+  }
+
+  // put list updatey stuff here
+};
+
 const getTierlist = (req, res) => TierlistModel.findByTitle(req.body.title, (err, docs) => {
   if (err) {
     console.log(err);
@@ -76,6 +96,7 @@ const getULists = (req, res) => TierlistModel.findByOwner(req.session.account._i
 module.exports = {
   makerPage,
   makeTierlist,
+  updateTierlist,
   getTierlist,
   getLists,
   getULists,

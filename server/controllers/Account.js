@@ -10,9 +10,13 @@ const signupPage = (req, res) => {
   res.render('signup', { csrfToken: req.csrfToken() });
 };
 
+const homepage = (req, res) => {
+  res.render('homepage', { csrfToken: req.csrfToken() });
+};
+
 const logout = (req, res) => {
   req.session.destroy();
-  res.redirect('/');
+  res.redirect('/login');
 };
 
 const login = (req, res) => {
@@ -30,7 +34,7 @@ const login = (req, res) => {
 
     req.session.account = Account.toAPI(account);
 
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/' });
   });
 };
 
@@ -108,6 +112,7 @@ const getToken = (req, res) => res.json({ csrfToken: req.csrfToken() });
 module.exports = {
   loginPage,
   signupPage,
+  homepage,
   login,
   logout,
   signup,

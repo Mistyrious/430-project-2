@@ -43,7 +43,7 @@ TierlistSchema.statics.findByTitle = (title, callback) => {
     title: mongoose.Types.String(title),
   };
 
-  return TierlistModel.find(search).select('title votes').lean().exec(callback);
+  return TierlistModel.find(search).select('title votes items').lean().exec(callback);
 };
 
 TierlistSchema.statics.findByOwner = (ownerId, callback) => {

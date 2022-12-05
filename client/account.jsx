@@ -37,7 +37,7 @@ const PassChangeForm = (props) => {
             <label htmlFor="pass2">Confirm New Password: </label>
             <input id="pass2" type="password" name="pass2" placeholder="password" />
             <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
-            <input className="makeDomoSubmit" type="submit" value="Update" />
+            <input className="makeListSubmit" type="submit" value="Update" />
         </form>
     );
 }

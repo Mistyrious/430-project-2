@@ -15,22 +15,27 @@ const makeNote = async (req, res) => {
     owner: req.session.account._id,
   };
 
-  if(req.body.location){
+  if (req.body.location) {
     noteData.location = req.body.location;
   }
 
-  if(req.body.body){
+  if (req.body.body) {
     noteData.body = req.body.body;
   }
 
-  if(req.body.finishDate){
+  if (req.body.finishDate) {
     noteData.finishDate = req.body.finishDate;
   }
 
   try {
     const newNote = new Note(noteData);
     await newNote.save();
-    return res.status(201).json({ title: newNote.title, location: newNote.location, body: newNote.body, finishDate: newNote.finishDate });
+    return res.status(201).json({
+      title: newNote.title,
+      location: newNote.location,
+      body: newNote.body,
+      finishDate: newNote.finishDate,
+    });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -40,56 +45,57 @@ const makeNote = async (req, res) => {
   }
 };
 
-const deleteNote = async(req, res) => {
-    if(!req.body.title){
-        return res.status(400).json({ error: 'No note specified!' });
-    }
-    let doc;
-    try {
-        doc = await NoteModel.findOne({ title }).exec();
-    } catch (err) {
-        return res.status(400).json({ error: 'An error occurred while finding note.' });
-    }
+const deleteNote = async (req, res) => {
+  if (!req.body.title) {
+    return res.status(400).json({ error: 'No note specified!' });
+  }
+  let doc;
+  try {
+    doc = await NoteModel.findOne({ title: req.body.title }).exec();
+  } catch (err) {
+    return res.status(400).json({ error: 'An error occurred while finding note.' });
+  }
 
-    if (!doc) {
-        return res.status(400).json({ error: 'No note found.' });
-    }
+  if (!doc) {
+    return res.status(400).json({ error: 'No note found.' });
+  }
 
-    try{
-        await NoteModel.deleteOne({title}).exec();
-    } catch (err) {
-        return res.status(400).json({ error: 'An error occurred while deleting.' });
-    }
-}
+  try {
+    await NoteModel.deleteOne({ title: req.body.title }).exec();
+    return res.status(204);
+  } catch (err) {
+    return res.status(400).json({ error: 'An error occurred while deleting.' });
+  }
+};
 
 const updateNote = async (req, res) => {
-    if(!req.body.title){
-        return res.status(400).json({ error: 'No note specified!' });
-    }
+  if (!req.body.title) {
+    return res.status(400).json({ error: 'No note specified!' });
+  }
 
-    let doc;
-    try {
-        doc = await NoteModel.findOne({ title }).exec();
-    } catch (err) {
-        return res.status(400).json({ error: 'An error occurred while finding note.' });
-    }
+  let doc;
+  try {
+    doc = await NoteModel.findOne({ title: req.body.title }).exec();
+  } catch (err) {
+    return res.status(400).json({ error: 'An error occurred while finding note.' });
+  }
 
-    if (!doc) {
-        return res.status(400).json({ error: 'No note found.' });
-    }
+  if (!doc) {
+    return res.status(400).json({ error: 'No note found.' });
+  }
 
-    try {
-        doc.title = req.body.title;
-        doc.location = req.body.location
-        doc.body = req.body.body;
-        doc.finishDate = req.body.finishDate;
-        await doc.save();
-        return res.json({ redirect: '/home' });
-    } catch (err) {
-        console.log(err);
-        return res.status(400).json({ error: 'An error occurred' });
-    }
-}
+  try {
+    doc.title = req.body.title;
+    doc.location = req.body.location;
+    doc.body = req.body.body;
+    doc.finishDate = req.body.finishDate;
+    await doc.save();
+    return res.json({ redirect: '/home' });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'An error occurred' });
+  }
+};
 
 const getNotes = (req, res) => NoteModel.findByOwner(req.session.account._id, (err, docs) => {
   if (err) {
@@ -101,12 +107,10 @@ const getNotes = (req, res) => NoteModel.findByOwner(req.session.account._id, (e
 });
 
 const notFoundPage = (req, res) => {
-    res.render('notFound', { csrfToken: req.csrfToken() });
-}
+  res.render('notFound', { csrfToken: req.csrfToken() });
+};
 
-const notFound = (req, res) => {
-    return res.status(404).json({error: `${req.path} could not be found.`});
-}
+const notFound = (req, res) => res.status(404).json({ error: `${req.path} could not be found.` });
 
 module.exports = {
   homepage,

@@ -98,9 +98,9 @@ const changePass = async (req, res) => {
     return res.json({ redirect: '/home' });
   } catch (err) {
     console.log(err);
-    return res.status(400).json({ error: 'An error occurred' }); 
+    return res.status(400).json({ error: 'An error occurred' });
   }
-  //something all up in these two try catches doesn't work
+  // something all up in these two try catches doesn't work
 };
 
 const getToken = (req, res) => res.json({ csrfToken: req.csrfToken() });

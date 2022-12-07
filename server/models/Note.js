@@ -51,7 +51,8 @@ NoteSchema.statics.findByOwner = (ownerId, callback) => {
     owner: mongoose.Types.ObjectId(ownerId),
   };
 
-  return NoteModel.find(search).select('title location body finishDate').sort({finishDate:1}).lean().exec(callback);
+  return NoteModel.find(search).select('title location body finishDate').sort({ finishDate: 1 }).lean()
+    .exec(callback);
 };
 
 NoteModel = mongoose.model('Note', NoteSchema);

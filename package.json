@@ -1,11 +1,11 @@
 {
-  "name": "Logins",
+  "name": "NotesApp",
   "version": "1.0.0",
   "engines": {
     "node": "12.16.0",
     "npm": "6.13.7"
   },
-  "description": "Collective Tierlist Application",
+  "description": "A note managing app",
   "main": "./server/app.js",
   "scripts": {
     "webpack": "webpack",

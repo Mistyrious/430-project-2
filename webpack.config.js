@@ -2,8 +2,9 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        app: './client/homepage.jsx',
-        login: './client/login.jsx'
+        noteApp: './client/home.jsx',
+        login: './client/login.jsx',
+        notFound: './client/notFound.jsx'
     },
     module: {
         rules: [

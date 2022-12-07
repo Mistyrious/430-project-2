@@ -49,14 +49,26 @@ const LoginWindow = (props) => {
             onSubmit={handleLogin}
             action="/login"
             method="POST"
-            className="mainForm"
+            className="form mainForm"
         >
-            <label htmlFor="username">Username: </label>
-            <input id="user" type="text" name="username" placeholder="username" />
-            <label htmlFor="pass">Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="password" />
+            <div className="field">
+                <label className="label is-medium" htmlFor="username">Username: </label>
+                <div className="control">
+                    <input className="input" id="user" type="text" name="username" placeholder="username" />
+                </div>
+            </div>
+            <div className="field">
+                <label className="label is-medium" htmlFor="pass">Password: </label>
+                <div className="control">
+                    <input className="input" id="pass" type="password" name="pass" placeholder="password" />
+                </div>
+            </div>
             <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
-            <input className="formSubmit" type="submit" value="Sign In" />
+            <div className="field has-addons has-addons-right">
+                <div className="control">
+                    <input className="button formSubmit" type="submit" value="Sign In" />
+                </div>
+            </div>
         </form>
     );
 }
@@ -68,16 +80,32 @@ const SignupWindow = (props) => {
         onSubmit={handleSignup}
         action="/signup"
         method="POST"
-        className="mainForm"
+        className="form mainForm"
     >
-        <label htmlFor="username">Username: </label>
-        <input id="user" type="text" name="username" placeholder="username" />
-        <label htmlFor="pass">Password: </label>
-        <input id="pass" type="password" name="pass" placeholder="password" />
-        <label htmlFor="pass2">Password: </label>
-        <input id="pass2" type="password" name="pass2" placeholder="retype password" />
+        <div className="field">
+            <label className="label is-medium" htmlFor="username">Username: </label>
+            <div className="control">
+                <input className="input" id="user" type="text" name="username" placeholder="username" />
+            </div>
+        </div>
+        <div className="field">
+            <label className="label is-medium" htmlFor="pass">Password: </label>
+            <div className="control">
+                <input className="input" id="pass" type="password" name="pass" placeholder="password" />
+            </div>
+        </div>
+        <div className="field">
+            <label className="label is-medium" htmlFor="pass2">Confirm Password: </label>
+            <div className="control">
+                <input className="input" id="pass2" type="password" name="pass2" placeholder="retype password" />
+            </div>
+        </div>
         <input id="_csrf" type="hidden" name="_csrf" value={props.csrf} />
-        <input className="formSubmit" type="submit" value="Sign Up" />
+        <div className="field has-addons has-addons-right">
+            <div className="control">
+            <input className="button formSubmit" type="submit" value="Sign Up" />
+            </div>
+        </div>
     </form>
     );
 }

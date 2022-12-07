@@ -10,10 +10,6 @@ const signupPage = (req, res) => {
   res.render('signup', { csrfToken: req.csrfToken() });
 };
 
-const homepage = (req, res) => {
-  res.render('homepage', { csrfToken: req.csrfToken() });
-};
-
 const logout = (req, res) => {
   req.session.destroy();
   res.redirect('/login');
@@ -34,7 +30,7 @@ const login = (req, res) => {
 
     req.session.account = Account.toAPI(account);
 
-    return res.json({ redirect: '/' });
+    return res.json({ redirect: '/home' });
   });
 };
 
@@ -56,7 +52,7 @@ const signup = async (req, res) => {
     const newAccount = new Account({ username, password: hash });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/home' });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -84,7 +80,6 @@ const changePass = async (req, res) => {
 
   try {
     doc = await Account.findById(user).exec();
-    // doc = await AccountModel.findOne({ user }).exec();
 
     Account.authenticate(doc.username, pass, (err, account) => {
       if (err || !account) {
@@ -100,11 +95,12 @@ const changePass = async (req, res) => {
     const hash = await Account.generateHash(pass);
     doc.password = hash;
     await doc.save();
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/home' });
   } catch (err) {
     console.log(err);
-    return res.status(400).json({ error: 'An error occurred' });
+    return res.status(400).json({ error: 'An error occurred' }); 
   }
+  //something all up in these two try catches doesn't work
 };
 
 const getToken = (req, res) => res.json({ csrfToken: req.csrfToken() });
@@ -112,7 +108,6 @@ const getToken = (req, res) => res.json({ csrfToken: req.csrfToken() });
 module.exports = {
   loginPage,
   signupPage,
-  homepage,
   login,
   logout,
   signup,

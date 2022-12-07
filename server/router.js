@@ -2,14 +2,8 @@ const controllers = require('./controllers');
 const mid = require('./middleware');
 
 const router = (app) => {
-  app.get('/getTierlist', mid.requiresSecure, controllers.Tierlist.getTierlist);
-  app.get('/getLists', mid.requiresSecure, controllers.Tierlist.getLists);
-  app.get('/getULists', mid.requiresSecure, mid.requiresLogin, controllers.Tierlist.getULists);
-  app.post('/makeTierlist', mid.requiresSecure, mid.requiresLogin, controllers.Tierlist.makeTierlist);
-  app.post('/updateTierlist', mid.requiresSecure, mid.requiresLogin, controllers.Tierlist.updateTierlist);
-
   app.get('/getToken', mid.requiresSecure, controllers.Account.getToken);
-  // app.get('/account', mid.requiresSecure, mid.requiresLogin, controllers.Account.accountPage);
+  app.get('/home', mid.requiresLogin, controllers.Note.homepage);
 
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
@@ -19,7 +13,14 @@ const router = (app) => {
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
-  app.get('/', mid.requiresSecure, mid.requiresLogin, controllers.Account.homepage);
+  app.get('/getNotes', mid.requiresLogin, controllers.Note.getNotes);
+  app.post('/makeNote', mid.requiresLogin, controllers.Note.makeNote);
+  app.post('/deleteNote', mid.requiresLogin, controllers.Note.deleteNote);
+  app.post('/updateNote', mid.requiresLogin, controllers.Note.updateNote);
+
+  app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+
+  app.get('/*', controllers.Note.notFoundPage);
 };
 
 module.exports = router;
